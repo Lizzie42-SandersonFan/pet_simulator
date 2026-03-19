@@ -1,1 +1,1 @@
-# pet_simulator
+# Pet Simulator

@@ -1,5 +1,3 @@
-# LD Classes needed
-
 class PetCreator:
     def __init__(self, name, species, age, hunger, happieness, energy):
         self.name = name
@@ -26,10 +24,14 @@ class PetCreator:
         setattr(self, item, value)
 
     def found_toy(self):
-        self.update_thing("happieness", 15)
-        return f"{self.name} found a toy! {self.name}'s happieness increased!"
+        self.happieness += 10
+        if self.happieness > 100:
+            self.happieness = 100
+        elif self.happieness < 0:
+            self.happieness = 0
+        return f"{self.name} found a toy! {self.name}'s happiness increased!"
     
-    def found_food(self):
-        self.update_thing("hunger", -10)
-        self.update_thing("happieness", 5)
-        return f"{self.name} found a treat! {self.name}'s happieness increased!"
+dog = PetCreator("Buddy", "Dog", 0, 50,50,50)
+print(dog)
+dog.update_thing("happieness", 10)
+print(dog)
