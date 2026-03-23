@@ -3,6 +3,7 @@ import csv
 from classes import PetCreator
 import random
 from helpers import type_print
+import os
 
 # ACTIONS:
 # feed, play, sleep, check stats, manage pets (show current pets, create new, switch pet, release pet, back), save, leave program 
@@ -126,15 +127,70 @@ def sleep(name):
 
 # Manage pets: Show the surrent pets saved then ask if they want to make a new pet, switch pets (cannot do if have only one)(also save previous pet changed stats), release a pet (see a past project to get this code), or go back to main menu
 # BUILD
+def manage(pet):
+    # Show what pets they have
+    type_print("Current pets you have:\n")
+    try:
+        with open("docs\\pet_data.csv", "r", newline = '') as csv_file:
+            reader = csv.DictReader(csv_file)
+            for line in reader:
+                type_print(f"- Name: {line[0]} Species: {line[1]} Age: {line[2]}")
+    except:
+        print("Could not read file in MANAGE function")
+    
+    # Now start the menu of actions they can do
+    while True:
+        type_print("1) Make New Pet\n2) Switch Pets\n3) Release a Pet (CAN NOT BE UNDONE)\n4) Back to Mian Menu\n")
+        choice = input("Enter the number of the action you would like to do:\n")
+        if choice == "1":
+            # New Pet
+            make_pet()
+        elif choice == "2":
+            # Switch pets (Check if they have more than one pet)
+            pass
+        elif choice == "3":
+            # Release pet
+            pass
+        elif choice == "4":
+            # Main menu
+            return
+        else:
+            print("Invalid input. Try again")
 
 # Save: Get the info for current pet equiped and save its stats. Then, go to user info, update money, day, and time
-# BUILD
-def save(pet, money, time, day):
+def save_pet(pet):
     # First, using the kind of logic from past project, find the pet in the CSV that matches the pet passed in. Then, update(write new file then delete old file) that pet.
-    # Next, 
-    pass
+    try:
+        temp_filename = "temp_pet.csv"
+        with open("docs\\pet_data.csv", mode='r', newline='') as infile, open(temp_filename, mode='w', newline='') as outfile:
+            reader = csv.DictReader(infile)
+            fieldnames = ['name','species','age','hunger','happieness','energy']
+            writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+
+            for row in reader:
+                if pet == row:
+                    # updating an item
+                    writer.writerow({'name': pet.name, 'species': pet.species, 'age': pet.age, 'hunger': pet.hunger, 'happieness': pet.happieness, 'energy': pet.energy})
+                    break
+                else:
+                    # Did not match the pet we have, so everything stays the same. Just write it
+                    writer.writerow(row)
+            os.replace(temp_filename, "pet_data.csv")
+    except:
+        print("Could not open pet info file in SAVE_PET function")
+
+def save_user(money, time, day):
+    # Next, go into user info and update money, time, and day
+    try:
+        with open("docs\\user_info.csv", mode="w", newline='') as file:
+            fieldnames2 = ['money','day','hour']
+            writer2 = csv.DictWriter(file, fieldnames=fieldnames2)
+            writer2.writeheader()
+            writer2.writerow({'money': money, 'day': day, 'hour': time})
+    except:
+        print("Could not open user info file in the SAVE_USER function")
 
 # Leave: Ask user if they are sure they want to leave and ask them if they are sure they have saved. Maybe I could somehow check if they have saved? (done in main menu)
 
 # After the user does something, move time forward an hour
-# Use random to trigger a random event. Probably 1-8 and only 3 and 7 trigger event. call this after time advance and DO NOT ADVANCE THE TIME
+# Use random to trigger a random event. Probably 1-8 and only 3 and 7 trigger event. call this after time advance and DO NOT ADVANCE THE TIME (done in main menu)

@@ -1,5 +1,5 @@
 # LD 1st Pet Simulator Personal Project
-from helpers import type_print
+from helpers import *
 from actions import *
 from classes import PetCreator
 import random
@@ -28,10 +28,10 @@ def main():
             # Trigger a random event using random
             # Hope this works
             if trigger_num == 3:
-                event = current_pet.name.found_toy()
+                event = current_pet.found_toy()
                 print(event)
             elif trigger_num == 7:
-                event = current_pet.name.found_food()
+                event = current_pet.found_food()
                 print(event)
             
             type_print(f"What would you like to do with {current_pet.name}:\n1) Feed {current_pet.name}\n2) Play with {current_pet.name}\n3) Put {current_pet.name} to Sleep\n4) Check {current_pet.name}'s Statuses\n5) Manage your Pets\n6) Save\n7) Leave Program\n")
@@ -43,6 +43,9 @@ def main():
                 changes = True
                 the_time += 1
                 # Call time check when it's built (in helpers file)
+                day_add = check_time(the_time)
+                if day_add == 1:
+                    the_day += 1
             elif choice == "2":
                 # Play
                 money_spent = play(current_pet.name)
@@ -50,6 +53,9 @@ def main():
                 changes = True
                 the_time += 1
                 # Call time check when it's built (in helpers file)
+                day_add = check_time(the_time)
+                if day_add == 1:
+                    the_day += 1
             elif choice == "3":
                 # Sleep
                 money_spent = sleep(current_pet.name)
@@ -57,6 +63,9 @@ def main():
                 changes = True
                 the_time += 1
                 # Call time check when it's built (in helpers file)
+                day_add = check_time(the_time)
+                if day_add == 1:
+                    the_day += 1
             elif choice == "4":
                 # Show stats
                 print(f"{current_pet.name}'s Stats:")
