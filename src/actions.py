@@ -128,6 +128,21 @@ def sleep(name):
 # Manage pets: Show the surrent pets saved then ask if they want to make a new pet, switch pets (cannot do if have only one)(also save previous pet changed stats), release a pet (see a past project to get this code), or go back to main menu
 # BUILD
 def manage(pet):
+    def more_than_one():
+        try:
+            with open("docs\\pet_data.csv", "r", newline = '') as file:
+                the_reader = csv.DictReader(file)
+                try:
+                    next(reader) # read the header
+                    next(reader) # read the first row (This must exist because they must already be managing a pet)
+                    next(reader) # If this can be read, there is a second pet
+                    return True
+                except:
+                    # Can not read anything past the header and first pet. Must only be one
+                    return False
+        except:
+            print("Could not open file in MORE THAN ONE function")
+
     # Show what pets they have
     type_print("Current pets you have:\n")
     try:
@@ -144,12 +159,20 @@ def manage(pet):
         choice = input("Enter the number of the action you would like to do:\n")
         if choice == "1":
             # New Pet
-            make_pet()
+            new_pet = make_pet()
+            # BUILD: Write the pet to CSV. NO SWITCHING
         elif choice == "2":
             # Switch pets (Check if they have more than one pet)
-            pass
+            second_pet = more_than_one()
+            if second_pet == True:
+                # Allow them to switch BUILD
+                pass
+            else:
+                print("It seems that you only have one pet and can not switch. Try something else")
+                continue
         elif choice == "3":
             # Release pet
+            # BUILD
             pass
         elif choice == "4":
             # Main menu

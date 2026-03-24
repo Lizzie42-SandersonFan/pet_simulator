@@ -24,7 +24,7 @@ def main():
         print(f"Current pet: {current_pet.name}({current_pet.species}) | Time: {the_time}:00 | Current Balance: ${user_money}")
         print(current_pet)
         while True:
-            trigger_num = random.randint(1, 8)
+            trigger_num = random.randint(1, 9)
             # Trigger a random event using random
             # Hope this works
             if trigger_num == 3:
@@ -32,6 +32,9 @@ def main():
                 print(event)
             elif trigger_num == 7:
                 event = current_pet.found_food()
+                print(event)
+            elif trigger_num == 5:
+                event = current_pet.got_sick()
                 print(event)
             
             type_print(f"What would you like to do with {current_pet.name}:\n1) Feed {current_pet.name}\n2) Play with {current_pet.name}\n3) Put {current_pet.name} to Sleep\n4) Check {current_pet.name}'s Statuses\n5) Manage your Pets\n6) Save\n7) Leave Program\n")
@@ -76,17 +79,17 @@ def main():
                 pass
             elif choice == "6":
                 # Save
-                # BUILD
-                pass
+                save_pet(current_pet)
+                save_user(user_money, the_time, the_day)
             elif choice == "7":
                 # Leave
                 if changes == True:
                     while True:
                         will_save = input("It seems that things have changed. Would you like to save these changes? (YES/NO)").strip().upper()
                         if will_save == "YES":
-                            # Call save function when built
-                            # BUILD
-                            pass
+                            # Call save functions
+                            save_pet(current_pet)
+                            save_user(user_money, the_time, the_day)
                         elif will_save == "NO":
                             break
                         else:

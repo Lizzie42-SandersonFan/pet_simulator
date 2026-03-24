@@ -33,3 +33,8 @@ class PetCreator:
         self.update_thing("hunger", -10)
         self.update_thing("happieness", 5)
         return f"{self.name} found a treat! {self.name}'s happieness increased!"
+    
+    def got_sick(self):
+        self.update_thing("energy", -20)
+        self.update_thing("happieness", -15)
+        return f"{self.name} got sick! {self.name}'s energy and happieness decreased!"
