@@ -105,6 +105,7 @@ def main():
                 # Save
                 save_pet(current_pet)
                 save_user(user_money, the_time, the_day)
+                print("Data Saved!")
             elif choice == "7":
                 # Leave
                 if changes == True:

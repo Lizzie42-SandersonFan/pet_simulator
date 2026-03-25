@@ -130,8 +130,8 @@ def sleep(pet):
 def manage(pet):
     def more_than_one():
         try:
-            with open("docs//pet_data.csv", "r", newline = '') as file:
-                the_reader = csv.DictReader(file)
+            with open("docs/pet_data.csv", "r") as file:
+                the_reader = csv.reader(file)
                 try:
                     next(the_reader) # read the header
                     next(the_reader) # read the first row (This must exist because they must already be managing a pet)
@@ -146,8 +146,9 @@ def manage(pet):
     # Show what pets they have
     type_print("Current pets you have:\n")
     try:
-        with open("docs//pet_data.csv", "r", newline = '') as csv_file:
-            reader = csv.DictReader(csv_file)
+        with open("docs/pet_data.csv", "r") as csv_file:
+            reader = csv.reader(csv_file)
+            headers = next(reader)
             for line in reader:
                 type_print(f"- Name: {line[0]} Species: {line[1]} Age: {line[2]}")
     except:
@@ -162,7 +163,7 @@ def manage(pet):
             new_pet = make_pet()
             # Write the pet to CSV. NO SWITCHING
             try:
-                with open("docs//pet_data.csv", "a", newline='') as csv_file:
+                with open("docs/pet_data.csv", "a", newline='') as csv_file:
                     fieldnames = ['name','species','age','hunger','happieness','energy']
                     writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
                     writer.writerow({'name': new_pet.name, 'species': new_pet.species, 'age': new_pet.age, 'hunger': new_pet.hunger, 'happieness': new_pet.happieness, 'energy': new_pet.energy})
@@ -190,21 +191,22 @@ def manage(pet):
             try:
                 # Get a file to write the changes to
                 temp_filename = "temp_pet.csv"
-                with open("docs//pet_data.csv", mode='r', newline='') as infile, open(temp_filename, mode='w', newline='') as outfile:
-                    reader = csv.DictReader(infile)
+                with open("docs/pet_data.csv", mode='r', newline='') as infile, open(temp_filename, mode='w', newline='') as outfile:
+                    next_reader = csv.DictReader(infile)
                     fieldnames = ['name','species','age','hunger','happieness','energy']
                     writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+                    writer.writeheader()
 
                     # Go through OG file and see if we can find a match for deletion
-                    for row in reader:
+                    for row in next_reader:
                         if name == row[0] and species == row[1]:
                             # Encountered the match. Deleating it, meaning it cannot be written so we pass over it
-                            break
+                            pass
                         else:
                             # Did not match the pet we have, so everything stays the same. Just write it
                             writer.writerow(row)
                     # Put the temp file in place of the OG file
-                    os.replace(temp_filename, "pet_data.csv")
+                    os.replace(temp_filename, "docs/pet_data.csv")
             except:
                 print("Could not open pet info file in MANAGE function for releasing pet")
                 break
@@ -219,27 +221,31 @@ def save_pet(pet):
     # First, using the kind of logic from past project, find the pet in the CSV that matches the pet passed in. Then, update(write new file then delete old file) that pet.
     try:
         temp_filename = "temp_pet.csv"
-        with open("docs//pet_data.csv", mode='r', newline='') as infile, open(temp_filename, mode='w', newline='') as outfile:
-            reader = csv.DictReader(infile)
+        with open("/workspaces/pet_simulator/docs/pet_data.csv", mode='r', newline='') as infile, open(temp_filename, mode='w', newline='') as outfile:
+            reader = csv.reader(infile)
+            headers = next(reader)
             fieldnames = ['name','species','age','hunger','happieness','energy']
             writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+            writer.writeheader()
 
             for row in reader:
-                if pet == row:
-                    # updating an item
+                if pet.name == row[0] and pet.species == row[1]:
+                    # updating an item. Will continue passing to get any pets that may be after the updated pet
                     writer.writerow({'name': pet.name, 'species': pet.species, 'age': pet.age, 'hunger': pet.hunger, 'happieness': pet.happieness, 'energy': pet.energy})
-                    break
+                    continue
                 else:
                     # Did not match the pet we have, so everything stays the same. Just write it
                     writer.writerow(row)
-            os.replace(temp_filename, "pet_data.csv")
+                    continue
+
+            os.replace(temp_filename, "/workspaces/pet_simulator/docs/pet_data.csv")
     except:
         print("Could not open pet info file in SAVE_PET function")
 
 def save_user(money, time, day):
     # Next, go into user info and update money, time, and day
     try:
-        with open("docs//user_info.csv", mode="w", newline='') as file:
+        with open("docs/user_info.csv", mode="w", newline='') as file:
             fieldnames2 = ['money','day','hour']
             writer2 = csv.DictWriter(file, fieldnames=fieldnames2)
             writer2.writeheader()
