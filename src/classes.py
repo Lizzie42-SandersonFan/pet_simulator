@@ -18,12 +18,13 @@ class PetCreator:
         if not hasattr(self, item):
             raise AttributeError(f"Pet has no attribute '{item}'")
         value = getattr(self, item)
-        value += amount
-        if value > 100:
-            value = 100
-        elif value < 0:
-            value = 0
-        setattr(self, item, value)
+        num_value = int(value)
+        num_value += amount
+        if num_value > 100:
+            num_value = 100
+        elif num_value < 0:
+            num_value = 0
+        setattr(self, item, num_value)
 
     def found_toy(self):
         self.update_thing("happieness", 15)
@@ -38,3 +39,7 @@ class PetCreator:
         self.update_thing("energy", -20)
         self.update_thing("happieness", -15)
         return f"{self.name} got sick! {self.name}'s energy and happieness decreased!"
+    
+    def birthday(self):
+        self.age += 1
+        return f"{self.name} had a birthday! {self.name} is now {self.age} month(s) old!"
